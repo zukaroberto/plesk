@@ -1,0 +1,14 @@
+
+---
+- hosts all
+  become true
+
+  tasks
+    - name install docker
+      apt
+        name {{ packages }}
+        state present
+        update_cache yes
+      vars
+        packages
+        - docker.io

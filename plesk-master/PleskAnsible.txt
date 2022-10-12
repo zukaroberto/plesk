@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+     - name: Get a script
+       get_url:
+         url: http://installer.plesk.com/plesk-installer
+         dest: /home/plesk
+     - name: install script
+       script: ./plesk-installer --source http://installer.plesk.com/ --target /home/plesk/plesk-installation --select-product-id plesk --select-release-latest --installation-type "Typical" --notify-email admin@example.com

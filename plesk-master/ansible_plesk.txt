@@ -1,0 +1,32 @@
+sudo -s
+apt update
+apt install ssh -y
+apt install ansible -y
+apt install sshpass
+apt install net-tools
+ifconfig
+nano /etc/ansible/hosts
+192.168.154.131
+ssh-keygen -t ed25519 -a 100
+ssh-copy-id plesk@192.168.154.134
+cd ~/.ssh/
+cat id_ed25519.pub >> authorized_keys
+chmod 0711 ~
+chmod 0700 ~/.ssh
+chmod 0600 ~/.ssh/authorized_keys
+mkdir /home/plesk/ansible
+mkdir /home/plesk/ansible/files
+cd /home/plesk/ansible
+nano playbook.yml
+---
+- hosts: all
+  become: true
+
+  tasks:
+     - name: Get a script
+       get_url:
+         url: http://installer.plesk.com/plesk-installer
+         dest: /home/plesk/ansible/files
+     - name: install script
+       script: ./files/plesk-installer --source http://installer.plesk.com/ --target /tmp/plesk-installation --select-product-id plesk --select-release-latest --installation-type "Typical" --notify-email admin@example.com
+ansible-playbook playbook.yml -u plesk -kK
